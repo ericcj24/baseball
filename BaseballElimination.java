@@ -171,7 +171,7 @@ public class BaseballElimination {
 			}
 		}
 
-		//System.out.println(fn.toString());
+		System.out.println(fn.toString());
 
 		FordFulkerson ff = new FordFulkerson(fn, sVertex, tVertex);
 
@@ -186,7 +186,11 @@ public class BaseballElimination {
 
 		for (int i=0; i<numberTeams; i++) {
 			if (i==teamIdx) continue;
-			if (ff.inCut(i)) {
+			int j=i;
+			if (j>teamIdx) {
+				j-=1;
+			}
+			if (ff.inCut(j)) {
 				rSet.add(teams[i]);
 			}
 		}
