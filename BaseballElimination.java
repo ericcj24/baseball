@@ -147,31 +147,33 @@ public class BaseballElimination {
 
 		int flowNetworkIdx = teamVerticesInFlowNetwork;
 		// build edges from start, and edges to individual team
-		for (int i=0; i<teamVerticesInFlowNetwork; i++) {
-			int irealTeamIdx = i;
-			if (irealTeamIdx>=teamIdx) {
-				irealTeamIdx+=1;
+		for (int i=0; i<numberTeams; i++) {
+			int iIdxInFlowNetwork = i;
+			if (iIdxInFlowNetwork==teamIdx) continue;
+			if (iIdxInFlowNetwork>teamIdx) {
+				iIdxInFlowNetwork-=1;
 			}
-			for (int j=irealTeamIdx+1; j<teamVerticesInFlowNetwork; j++) {
-				int jrealTeamIdx = j;
-				if (jrealTeamIdx>=teamIdx) {
-					jrealTeamIdx+=1;
+			for (int j=i+1; j<numberTeams; j++) {
+				int jIdxInFlowNetwork = j;
+				if(jIdxInFlowNetwork==teamIdx) continue;
+				if (jIdxInFlowNetwork>teamIdx) {
+					jIdxInFlowNetwork-=1;
 				}
 
-				FlowEdge s1 = new FlowEdge(flowNetworkIdx, i, Double.POSITIVE_INFINITY);
+				FlowEdge s1 = new FlowEdge(flowNetworkIdx, iIdxInFlowNetwork, Double.POSITIVE_INFINITY);
 				fn.addEdge(s1);
 
-				FlowEdge s2 = new FlowEdge(flowNetworkIdx, j, Double.POSITIVE_INFINITY);
+				FlowEdge s2 = new FlowEdge(flowNetworkIdx, jIdxInFlowNetwork, Double.POSITIVE_INFINITY);
 				fn.addEdge(s2);
 
-				FlowEdge s = new FlowEdge(sVertex, flowNetworkIdx, g[irealTeamIdx][jrealTeamIdx]);
+				FlowEdge s = new FlowEdge(sVertex, flowNetworkIdx, g[i][j]);
 				fn.addEdge(s);
 
 				flowNetworkIdx++;
 			}
 		}
 
-		System.out.println(fn.toString());
+		//System.out.println(fn.toString());
 
 		FordFulkerson ff = new FordFulkerson(fn, sVertex, tVertex);
 
